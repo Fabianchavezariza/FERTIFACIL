@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+
+const whatsapp = (message) => `https://wa.me/573133264196?text=${encodeURIComponent(message)}`;
 
 export default function FertiFacilLanding() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [quote, setQuote] = useState("");
+  function submitQuote(event) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    setQuote(whatsapp(`Hola FertiFácil, solicito cotización. Nombre: ${data.get("nombre")}. Email: ${data.get("email")}. Teléfono: ${data.get("telefono")}. Producto: ${data.get("producto")}. Mensaje: ${data.get("mensaje")}. Contraentrega: ${data.has("contraentrega") ? "Sí" : "No"}.`));
+  }
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* NAVBAR */}
@@ -24,7 +33,9 @@ export default function FertiFacilLanding() {
             >
               WhatsApp
             </a>
+            <button type="button" className="md:hidden rounded-xl border p-3" aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? "Cerrar menú" : "Abrir menú"}</button>
           </div>
+          {menuOpen && <nav id="mobile-navigation" aria-label="Navegación móvil" className="md:hidden flex flex-col gap-4 pb-5">{[["productos","Productos"],["beneficios","Beneficios"],["ficha","Ficha técnica"],["distribucion","Distribución"],["contacto","Contacto"]].map(([id,label]) => <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav>}
         </div>
       </header>
 
@@ -38,7 +49,7 @@ export default function FertiFacilLanding() {
                 Nutrición inteligente para cultivos <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-600">más sanos y productivos</span>
               </h1>
               <p className="mt-4 text-lg text-gray-600">
-                Soluciones foliares de alto desempeño diseñadas para fortalecer estructura celular, mejorar calidad de fruto y potenciar el rendimiento en campo.
+                Consulta nuestro portafolio de nutrición vegetal. Cuéntanos sobre tu cultivo y solicita información técnica y una cotización.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <a
@@ -48,7 +59,7 @@ export default function FertiFacilLanding() {
                   Ver productos
                 </a>
                 <a
-                  href="mailto:gerencia@agrofertifacil.com"
+                  href="#contacto"
                   className="inline-flex items-center justify-center rounded-2xl px-5 py-3 font-semibold ring-1 ring-gray-300 text-gray-900 hover:bg-gray-50"
                 >
                   Solicitar cotización
@@ -56,12 +67,12 @@ export default function FertiFacilLanding() {
               </div>
               <dl className="mt-8 grid grid-cols-3 gap-4 text-center">
                 <div className="rounded-2xl border border-gray-200 p-4">
-                  <dt className="text-xs text-gray-500">Registro ICA</dt>
-                  <dd className="text-lg font-semibold">13045</dd>
+                  <dt className="text-xs text-gray-500">Atención</dt>
+                  <dd className="text-lg font-semibold">WhatsApp</dd>
                 </div>
                 <div className="rounded-2xl border border-gray-200 p-4">
                   <dt className="text-xs text-gray-500">Presentaciones</dt>
-                  <dd className="text-lg font-semibold">1 L · 4 L · 20 L</dd>
+                  <dd className="text-lg font-semibold">Consulta disponibilidad</dd>
                 </div>
                 <div className="rounded-2xl border border-gray-200 p-4">
                   <dt className="text-xs text-gray-500">Cobertura</dt>
@@ -74,9 +85,9 @@ export default function FertiFacilLanding() {
               <div className="aspect-[4/3] rounded-3xl border border-gray-200 bg-white shadow-sm p-6 flex items-center justify-center">
                 <div className="grid gap-4 sm:grid-cols-3 w-full">
                   {[
-                    { name: "FertiFácil Potasio", tag: "K · Calidad de fruto" },
-                    { name: "FertiFácil Calcio", tag: "Ca · Firmeza y paredes celulares" },
-                    { name: "FertiFácil Fósforo Zinc", tag: "P·Zn · Enraizamiento y vigor" },
+                    { name: "FertiFácil Potasio", tag: "Potasio" },
+                    { name: "FertiFácil Calcio", tag: "Calcio" },
+                    { name: "FertiFácil Fósforo Zinc", tag: "Fósforo y zinc" },
                   ].map((p) => (
                     <div key={p.name} className="rounded-2xl border border-gray-200 p-4">
                       <div className="h-24 w-full rounded-xl bg-gradient-to-br from-emerald-400/30 to-sky-400/30" />
@@ -91,6 +102,9 @@ export default function FertiFacilLanding() {
         </div>
       </section>
 
+      <section id="productos" className="bg-emerald-50 py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><h2 className="text-3xl font-bold">Nuestro portafolio</h2><p className="mt-3 text-gray-600">Consulta presentaciones, disponibilidad y condiciones comerciales.</p><div className="mt-8 grid gap-6 md:grid-cols-3">{["FertiFácil Potasio", "FertiFácil Calcio", "FertiFácil Fósforo Zinc"].map(name => <article key={name} className="rounded-3xl border bg-white p-6"><h3 className="text-xl font-bold">{name}</h3><p className="my-4 text-gray-600">Solicita información del producto para tu cultivo.</p><a className="inline-flex rounded-xl bg-emerald-700 px-4 py-3 font-semibold text-white" href={whatsapp(`Hola FertiFácil, quiero cotizar ${name}. Mi cultivo, municipio y cantidad son:`)}>Cotizar por WhatsApp</a></article>)}</div></div></section>
+      <section id="beneficios" className="py-16"><div className="mx-auto max-w-7xl px-4"><h2 className="text-3xl font-bold">Una compra fácil de gestionar</h2><div className="mt-6 grid gap-6 md:grid-cols-3">{["Consulta según tu cultivo", "Cotización personalizada", "Coordinación de tu pedido"].map(t => <h3 key={t} className="rounded-2xl border p-6 font-semibold">{t}</h3>)}</div></div></section>
+      <section id="ficha" className="bg-sky-50 py-16"><div className="mx-auto max-w-7xl px-4"><h2 className="text-3xl font-bold">Información técnica</h2><p className="my-4 text-gray-600">Solicita la ficha técnica y etiqueta vigentes del producto. Las dosis y recomendaciones deben definirse según el cultivo y la evaluación técnica.</p><a className="font-semibold text-emerald-800 underline" href={whatsapp("Hola FertiFácil, solicito la ficha técnica y etiqueta vigentes del producto:")}>Solicitar ficha técnica por WhatsApp</a></div></section>
       {/* DISTRIBUCION */}
       <section id="distribucion" className="bg-white py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -99,7 +113,7 @@ export default function FertiFacilLanding() {
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-gray-200 p-6">
               <h3 className="font-semibold text-lg">Unicampo · Bucaramanga</h3>
-              <p className="text-sm text-gray-600">Acompañamiento técnico y disponibilidad inmediata.</p>
+              <p className="text-sm text-gray-600">Acompañamiento técnico y consulta de disponibilidad.</p>
               <p className="mt-2 text-sm text-gray-700">Contactos: Ing. Jonathan Carvajal · Ing. César Jaimes</p>
             </div>
             <div className="rounded-3xl border border-gray-200 p-6">
@@ -124,37 +138,40 @@ export default function FertiFacilLanding() {
               </ul>
             </div>
             <div className="rounded-3xl border border-gray-200 p-6">
-              <form className="grid gap-4">
+              <form onSubmit={submitQuote} className="grid gap-4">
                 <div>
-                  <label className="text-sm font-medium">Nombre completo</label>
-                  <input className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Tu nombre" />
+                  <label htmlFor="nombre" className="text-sm font-medium">Nombre completo</label>
+                  <input id="nombre" name="nombre" required maxLength={100} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Tu nombre" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium">Email</label>
-                    <input className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="tucorreo@dominio.com" />
+                    <label htmlFor="email" className="text-sm font-medium">Email (opcional)</label>
+                    <input id="email" name="email" type="email" maxLength={150} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="tucorreo@dominio.com" />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">Teléfono</label>
-                    <input className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="+57..." />
+                    <label htmlFor="telefono" className="text-sm font-medium">Teléfono (opcional)</label>
+                    <input id="telefono" name="telefono" type="tel" maxLength={30} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="+57..." />
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Mensaje</label>
-                  <textarea rows={4} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Cuéntanos sobre tu cultivo" />
+                  <label htmlFor="producto" className="text-sm font-medium">Producto</label><select id="producto" name="producto" className="my-2 w-full rounded-xl border p-3"><option>Consulta general</option><option>FertiFácil Potasio</option><option>FertiFácil Calcio</option><option>FertiFácil Fósforo Zinc</option></select><label htmlFor="mensaje" className="text-sm font-medium">Cultivo, municipio y cantidad</label>
+                  <textarea id="mensaje" name="mensaje" required maxLength={1000} rows={4} className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Cuéntanos sobre tu cultivo" />
                 </div>
                 <label className="flex items-center gap-2 text-sm">
-                  <input type="checkbox" className="rounded text-emerald-600" />
+                  <input type="checkbox" name="contraentrega" className="rounded text-emerald-600" />
                   Deseo realizar el pedido con pago contraentrega
                 </label>
-                <button type="button" className="rounded-2xl bg-gray-900 text-white font-semibold px-5 py-3 hover:opacity-95">
-                  Enviar (demo)
+                <button type="submit" className="rounded-2xl bg-gray-900 text-white font-semibold px-5 py-3 hover:opacity-95">
+                  Preparar cotización por WhatsApp
                 </button>
+                <p className="text-xs text-gray-500">Al continuar, compartirás estos datos en WhatsApp para gestionar tu solicitud. Puedes revisar el mensaje antes de enviarlo.</p>
+                {quote && <a href={quote} className="rounded-xl bg-emerald-700 p-4 text-center font-semibold text-white">Abrir solicitud en WhatsApp</a>}
               </form>
             </div>
           </div>
         </div>
       </section>
+      <footer className="border-t p-6 text-center text-sm text-gray-600">FertiFácil Agrocomercial · <a className="underline" href="https://www.instagram.com/fchavezsantander/">Instagram @fchavezsantander</a> · Facebook: Fertifácil Agrocomercial</footer>
     </div>
   );
 }
